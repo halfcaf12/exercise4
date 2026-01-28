@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxLives = 3;
     
     private int currentLives;
+    private bool isInvulnerable = false;
     
     // Event for when lives change (useful for UI updates)
     public static Action<int> LivesChanged;
@@ -34,6 +35,7 @@ public class PlayerHealth : MonoBehaviour
     public bool TakeDamage(int damage = 1)
     {
         if (IsDead) return true; // Already dead
+        if (isInvulnerable) return false; // Can't take damage while invulnerable
         
         currentLives = Mathf.Max(0, currentLives - damage);
         NotifyLivesChanged();
@@ -98,6 +100,16 @@ public class PlayerHealth : MonoBehaviour
     // Public method to reset health (called by game reset systems)
     public void ResetHealth()
     {
+        isInvulnerable = false;
         RestoreFullHealth();
+    }
+
+    /// <summary>
+    /// Sets the player's invulnerability state.
+    /// </summary>
+    public void SetInvulnerable(bool invulnerable)
+    {
+        isInvulnerable = invulnerable;
+        Debug.Log($"Player invulnerability set to: {invulnerable}");
     }
 }

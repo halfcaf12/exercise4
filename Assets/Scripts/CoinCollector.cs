@@ -56,7 +56,8 @@ public class CoinCollector : MonoBehaviour
     // Keep OnTriggerEnter2D for compatibility if you do add Rigidbody2D later
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isCollected)
+        // Only collect if triggered by the Player (not arrows or other objects)
+        if (!isCollected && other.CompareTag("Player"))
         {
             CollectCoin(other.gameObject);
         }

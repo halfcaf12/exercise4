@@ -113,6 +113,13 @@ public class GameManager : MonoBehaviour
         gameWon = true;
         Debug.Log("GameManager: All coins collected! You win!");
 
+        // Make player invulnerable so they can't die after winning
+        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.SetInvulnerable(true);
+        }
+
         // Show win screen tilemap
         if (winScreenTilemapObject != null)
         {
