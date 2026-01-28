@@ -65,6 +65,7 @@ public class ArcherBehavior : MonoBehaviour
     //   c. Use `StartCoroutine(ShootArrow())` to start to shoot an arrow at the player
     //
     // Hint: You'll need to use the `isInRange()` and `cooldownOver()` methods you just implemented
+    // Hint: One of the helper functions down below migth be useful here.
     //
     // Don't worry too much about what a coroutine is. Essentially, it is a way to run asynchronous code
     // that doesn't block the update function from finishing. We are using it here because the ShootArrow
