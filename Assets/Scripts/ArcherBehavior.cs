@@ -18,6 +18,8 @@ public class ArcherBehavior : MonoBehaviour
     [SerializeField] private float cooldown = 2f;           // The cooldown time between shots
     private float lastShotTime;                             // The time of the last shot
 
+    private Vector3 startPosition; // Store initial position for reset
+
     // GET REFERENCES TO RELEVANT COMPONENTS AND GAME OBJECTS - You shouldn't need to change this
     void Start()
     {
@@ -25,6 +27,7 @@ public class ArcherBehavior : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player");
         lastShotTime = -cooldown;
+        startPosition = transform.position; // Remember starting position
     }
 
     ////////////////////////////////////////////////////////////
@@ -153,5 +156,25 @@ public class ArcherBehavior : MonoBehaviour
         {
             spriteRenderer.flipX = player.transform.position.x < transform.position.x;
         }
+    }
+
+    /// <summary>
+    /// Resets the archer to its initial state for game reset.
+    /// Called by GameManager when the game restarts.
+    /// </summary>
+    public void ResetArcher()
+    {
+        // Re-enable components via DeathEffect if it exists
+        DeathEffect deathEffect = GetComponent<DeathEffect>();
+        if (deathEffect != null)
+        {
+            deathEffect.ReenableComponents();
+        }
+        
+        // Reset position to starting position
+        transform.position = startPosition;
+        
+        // Reset cooldown so archer doesn't immediately shoot
+        lastShotTime = -cooldown;
     }
 }

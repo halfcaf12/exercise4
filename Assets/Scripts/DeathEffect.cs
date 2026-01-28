@@ -32,8 +32,9 @@ public class DeathEffect : MonoBehaviour
         if (isDying) return; // Prevent multiple calls
         isDying = true;
         
-        // Check if this is a player - don't destroy players, they need to be respawned
+        // Check if this is a player or archer - don't destroy them, they need to be respawned on game reset
         bool isPlayer = GetComponent<PlayerHealth>() != null;
+        bool isArcher = GetComponent<ArcherBehavior>() != null;
         
         // Play the smoke effect
         if (smokeEffectPrefab != null)
@@ -82,8 +83,8 @@ public class DeathEffect : MonoBehaviour
         // Disable the GameObject's renderer and collider immediately for visual feedback
         DisableComponents();
         
-        // Only destroy non-player objects
-        if (!isPlayer)
+        // Only destroy objects that aren't players or archers (they need to respawn on game reset)
+        if (!isPlayer && !isArcher)
         {
             // Destroy the GameObject after a short delay
             Destroy(gameObject, destroyDelay);

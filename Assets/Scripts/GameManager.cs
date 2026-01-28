@@ -174,6 +174,9 @@ public class GameManager : MonoBehaviour
         // Re-enable all coins
         ReenableAllCoins();
 
+        // Re-enable all archers
+        ReenableAllArchers();
+
         // Reset player to home position
         ResetPlayer();
 
@@ -275,6 +278,22 @@ public class GameManager : MonoBehaviour
         }
         
         Debug.Log($"GameManager: Re-enabled {allCoins.Length} coins. Coins remaining: {GetRemainingCoins()}");
+    }
+
+    private void ReenableAllArchers()
+    {
+        // Find all archers (including ones with disabled components)
+        ArcherBehavior[] allArchers = FindObjectsOfType<ArcherBehavior>(true); // true = include inactive
+        
+        foreach (ArcherBehavior archer in allArchers)
+        {
+            if (archer != null)
+            {
+                archer.ResetArcher();
+            }
+        }
+        
+        Debug.Log($"GameManager: Re-enabled {allArchers.Length} archers");
     }
 
     private void UpdateCoinText()
