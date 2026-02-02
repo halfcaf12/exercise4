@@ -33,16 +33,18 @@ public class ArcherBehavior : MonoBehaviour
     ////////////////////////////////////////////////////////////
     // TODO: IMPLEMENT THE METHODS BELOW TO COMPLETE THE EXERCISE
     ////////////////////////////////////////////////////////////
-    
+
     // PART 1: We need to check if the player is in range of the archer
     // Return true if the player is in range, false otherwise
     //
     // Hint: We have given you a method `calculateDistanceToPlayer()` to help you out with the distance calculation.
     // It is defined below if you want to understand how it works.
     // Hint: which of the state variables at the top of this file might you need for this function?
-    private bool isInRange() {
+    private bool isInRange()
+    {
         // TODO: Implement this method
-        return false;
+        if (player == null) return false;
+        return calculateDistanceToPlayer() <= range;
     }
 
     // PART 2: We need to check if the archer's shooting cooldown is over
@@ -50,9 +52,10 @@ public class ArcherBehavior : MonoBehaviour
     //
     // Hint: Use `Time.time` to get the current in-game time
     // Hint: You'll know the cooldown is over when the time since the last shot is greater than the cooldown
-    private bool cooldownOver() {
+    private bool cooldownOver()
+    {
         // TODO: Implement this method
-        return false;
+        return (Time.time - lastShotTime) >= cooldown;
     }
 
     // PART 3: Finally, we need to put it all together and tell the archer how to behave on every frame
@@ -75,6 +78,22 @@ public class ArcherBehavior : MonoBehaviour
     void Update()
     {
         // TODO: Implement this method
+        if (player == null) return;
+
+        facePlayer();
+
+        bool shouldShoot = isInRange() && cooldownOver();
+
+        if (animator != null)
+        {
+            animator.SetBool("isShooting", shouldShoot);
+        }
+
+        if (shouldShoot)
+        {
+            lastShotTime = Time.time;
+            StartCoroutine(ShootArrow());
+        }
     }
 
 
@@ -83,7 +102,8 @@ public class ArcherBehavior : MonoBehaviour
     ////////////////////////////////////////////////////////////
 
     // Calculate the distance between the archer and the player
-    private float calculateDistanceToPlayer() {
+    private float calculateDistanceToPlayer()
+    {
         return Vector3.Distance(transform.position, player.transform.position);
     }
 
@@ -170,10 +190,10 @@ public class ArcherBehavior : MonoBehaviour
         {
             deathEffect.ReenableComponents();
         }
-        
+
         // Reset position to starting position
         transform.position = startPosition;
-        
+
         // Reset cooldown so archer doesn't immediately shoot
         lastShotTime = -cooldown;
     }
